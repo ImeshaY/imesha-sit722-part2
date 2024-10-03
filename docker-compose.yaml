@@ -1,0 +1,14 @@
+version: '3.8'  # Specify the Docker Compose file format version
+
+services:
+  bookcatalogapp:
+    build:
+      context: ./  # Path to the directory containing the Dockerfile
+      dockerfile: Dockerfile  # Name of the Dockerfile
+    ports:
+      - "8000:8000"  # Expose port 8000 for the FastAPI app
+    environment:
+      DATABASE_URL: "postgresql://deakin_library_3ry0_user:SHPfsBq32bDzxaONL1yJQbyU602nxxep@dpg-crv87r88fa8c73ct3nc0-a.oregon-postgres.render.com/deakin_library_3ry0"  # PostgreSQL external connection string
+
+
+

@@ -1,1 +1,42 @@
 # Write Kubernetes Deployment Script
+
+# Deployment and Service for FastAPI application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookcatalog # Name of the FastAPI deployment
+  labels:
+    app: bookcatalog # Label to identify the FastAPI application
+spec:
+  replicas: 1 # Number of instances of the FastAPI app to run
+  selector:
+    matchLabels:
+      app: bookcatalog # Match labels for the pods
+  template:
+    metadata:
+      labels:
+        app: bookcatalog # Label for the pod template
+    spec:
+      containers:
+        - name: bookcatalog # Name of the FastAPI container
+          image: bookcatalog:latest # Docker image for the FastAPI app
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000 # Expose FastAPI on port 8000
+          env:
+            - name: DATABASE_URL # Environment variable for database connection
+              value: "postgresql://deakin_library_3ry0_user:SHPfsBq32bDzxaONL1yJQbyU602nxxep@dpg-crv87r88fa8c73ct3nc0-a.oregon-postgres.render.com/deakin_library_3ry0" # PostgreSQL connection string
+---
+# Service to expose FastAPI application
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookcatalog-service # Name of the service for FastAPI
+spec:
+  type: LoadBalancer # Type of service to expose it externally
+  ports:
+    - port: 8000 # External port exposed for FastAPI
+      targetPort: 8000 # Port the FastAPI container listens on
+  selector:
+    app: bookcatalog # Selector to route traffic to the FastAPI pods
+
